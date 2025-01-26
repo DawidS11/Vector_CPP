@@ -8,23 +8,21 @@ int main()
     Vector<int> int_vec;
     Vector<std::string> str_vec;
 
-    //int tmp = int_vec.back();
     int_vec.push_back(1);
     int_vec.emplace_back(2);
     int_vec.print();
+    assert(int_vec.front() == int_vec[0]);
+    assert(int_vec.back() == int_vec[1]);
 
-    //str_vec.pop_back();
-    //std::string s = str_vec.back();
     str_vec.push_back("aaa");
     str_vec.emplace_back("bbb");
     str_vec.print();
-    std::cout << str_vec[0] << std::endl;
-
-
+    assert(str_vec.front() == str_vec[0]);
+    assert(str_vec.back() == str_vec[1]);
+    
 
     // ----- iterators -----
     Vector<int> v;
-
     v.push_back(1);
     v.push_back(2);
     v.push_back(3);
