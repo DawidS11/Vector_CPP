@@ -1,4 +1,4 @@
 # Vector_CPP
 
-Initial capacity = 1;
+Initial capacity = 0;
 Resized x2.

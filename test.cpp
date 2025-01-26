@@ -10,8 +10,8 @@ int main()
     Vector<int> v2(std::move(v1));
 
     Vector<int> int_vec;
-    Vector<std::string> str_vec;
-
+    assert(int_vec.get_capacity() == 0);
+    assert(int_vec.get_size() == 0);
     int_vec.push_back(1);
     int_vec.emplace_back(2);
     int_vec.print();
@@ -20,6 +20,10 @@ int main()
     assert(int_vec.get(0) == 1);
     assert(int_vec[0] == 1);
 
+    Vector<std::string> str_vec;
+    str_vec.reserve(5);
+    assert(str_vec.get_capacity() == 5);
+    assert(str_vec.get_size() == 0);
     str_vec.push_back("aaa");
     str_vec.emplace_back("bbb");
     str_vec.print();

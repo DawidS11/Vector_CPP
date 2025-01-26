@@ -10,9 +10,21 @@ private:
     int capacity;
     int size;
 
+    void grow()
+    {
+        capacity = capacity == 0 ? 1 : capacity * 2;
+        T* tmp = new T[capacity];
+        for (int i = 0; i < capacity; ++i)
+        {
+            tmp[i] = arr[i];
+        }
+        delete[] arr;
+        arr = tmp;
+    }
+
 public:
     Vector()
-        : arr(new T[1]), capacity(1), size(0)
+        : arr(new T[0]), capacity(0), size(0)
     {}
 
     Vector(int n)
@@ -50,8 +62,7 @@ public:
     {
         if (capacity < new_capacity)
         {
-            T* tmp = new T[capacity];
-
+            T* tmp = new T[new_capacity];
             for (int i = 0; i < capacity; ++i)
             {
                 tmp[i] = arr[i];
@@ -70,7 +81,7 @@ public:
     {
         if (size == capacity)
         {
-            reserve(capacity * 2);
+            grow();
         }
         arr[size++] = data;
     }
@@ -80,7 +91,7 @@ public:
     {
         if (size == capacity)
         {
-            reserve(capacity * 2);
+            grow();
         }
         new (&arr[size++]) T(std::forward<Args>(args)...);
     }
