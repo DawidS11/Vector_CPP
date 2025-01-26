@@ -6,5 +6,5 @@ Initial capacity = 0. Capacity grows x2 when the size is equal to capacity and a
 ## Build
 `./make all`
 
-## How to run
+## How to run tests
 `./vector`
