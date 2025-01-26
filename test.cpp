@@ -5,21 +5,29 @@
 
 int main()
 {
+    Vector<int> v0(5);
+    Vector<int> v1(v0);
+    Vector<int> v2(std::move(v1));
+
     Vector<int> int_vec;
     Vector<std::string> str_vec;
 
     int_vec.push_back(1);
     int_vec.emplace_back(2);
     int_vec.print();
-    assert(int_vec.front() == int_vec[0]);
-    assert(int_vec.back() == int_vec[1]);
+    assert(int_vec.front() == 1);
+    assert(int_vec.back() == 2);
+    assert(int_vec.get(0) == 1);
+    assert(int_vec[0] == 1);
 
     str_vec.push_back("aaa");
     str_vec.emplace_back("bbb");
     str_vec.print();
-    assert(str_vec.front() == str_vec[0]);
-    assert(str_vec.back() == str_vec[1]);
-    
+    assert(str_vec.front() == "aaa");
+    assert(str_vec.back() == "bbb");
+    assert(str_vec.get(0) == "aaa");
+    assert(str_vec[0] == "aaa");
+
 
     // ----- iterators -----
     Vector<int> v;

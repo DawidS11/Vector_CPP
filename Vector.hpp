@@ -29,7 +29,7 @@ public:
     {
         for (int i = 0; i < other.size; ++i)
         {
-            arr[index] = other.arr[i];
+            arr[i] = other.arr[i];
         }
     }
 
@@ -109,7 +109,7 @@ public:
         }
     }
 
-    T get(int index)
+    T& get(int index)
     {
         if (index < size)
         {
@@ -117,7 +117,7 @@ public:
         }
         else
         {
-            std::cout << "get(): Index is not within range." << std::endl;
+            throw std::runtime_error("get(): Index is not within range.");
         }
     }
 
