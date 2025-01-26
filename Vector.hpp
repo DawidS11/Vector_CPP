@@ -8,13 +8,37 @@ class Vector
 private:
     T* arr;
     int capacity;
-    int num_elements;
+    int size;
 
 public:
     Vector()
-    : capacity(1), num_elements(0)
+        : arr(new T[1]), capacity(1), size(0)
+    {}
+
+    Vector(int n)
+	    : arr(new T[n]), capacity(n), size(n)
     {
-        arr = new T[1];
+        for (int i = 0; i < n; ++i)
+        {
+            arr[i] = T();
+        }
+    }
+
+    explicit Vector(const Vector& other)
+        : arr(new T[other.size]), capacity(other.capacity), size(other.size)
+    {
+        for (int i = 0; i < other.size; ++i)
+        {
+            arr[index] = other.arr[i];
+        }
+    }
+
+    explicit Vector(Vector&& other) noexcept
+        : arr(other.arr), capacity(other.capacity), size(other.size)
+    {
+        other.arr = nullptr;
+        other.size = 0;
+        other.capacity = 0;
     }
 
     ~Vector()
@@ -26,13 +50,13 @@ public:
     {
         if (capacity < new_capacity)
         {
-            capacity = new_capacity;
             T* tmp = new T[capacity];
 
             for (int i = 0; i < capacity; ++i)
             {
                 tmp[i] = arr[i];
             }
+            capacity = new_capacity;
             delete[] arr;
             arr = tmp;
         }
@@ -44,26 +68,26 @@ public:
 
     void push_back(const T& data)
     {
-        if (num_elements == capacity)
+        if (size == capacity)
         {
             reserve(capacity * 2);
         }
-        arr[num_elements++] = data;
+        arr[size++] = data;
     }
 
     template <typename... Args>
     void emplace_back(Args&&... args)
     {
-        if (num_elements == capacity)
+        if (size == capacity)
         {
             reserve(capacity * 2);
         }
-        new (&arr[num_elements++]) T(std::forward<Args>(args)...);
+        new (&arr[size++]) T(std::forward<Args>(args)...);
     }
 
     T& front()
     {
-        if (num_elements > 0)
+        if (size > 0)
         {
             return arr[0];
         }
@@ -75,9 +99,9 @@ public:
 
     T& back()
     {
-        if (num_elements > 0)
+        if (size > 0)
         {
-            return arr[num_elements-1];
+            return arr[size-1];
         }
         else
         {
@@ -87,7 +111,7 @@ public:
 
     T get(int index)
     {
-        if (index < num_elements)
+        if (index < size)
         {
             return arr[index];   
         }
@@ -99,10 +123,10 @@ public:
 
     void pop_back()
     {
-        if (num_elements > 0)
+        if (size > 0)
         {
-            --num_elements;
-            arr[num_elements].~T();
+            --size;
+            arr[size].~T();
         }
         else
         {
@@ -110,14 +134,14 @@ public:
         }
     }
 
-    int size()
-    {
-        return num_elements;
-    }
-
     bool empty()
     {
-        return num_elements == 0;
+        return size == 0;
+    }
+
+    int get_size()
+    {
+        return size;
     }
 
     int get_capacity()
@@ -127,7 +151,7 @@ public:
 
     T& operator[](int index)
     {
-        if (index >= num_elements) {
+        if (index >= size) {
             throw std::out_of_range("[]: Index out of range");
         }
         return arr[index];
@@ -135,7 +159,7 @@ public:
 
     const T& operator[](int index) const
     {
-        if (index >= num_elements) {
+        if (index >= size) {
             throw std::out_of_range("[]: Index out of range");
         }
         return arr[index];
@@ -143,7 +167,7 @@ public:
 
     void print() const
     {
-        for (int i = 0; i < num_elements; ++i)
+        for (int i = 0; i < size; ++i)
         {
             std::cout << arr[i] << " ";
         }
@@ -178,5 +202,5 @@ public:
     };
 
     Iterator begin() { return Iterator(arr); }
-    Iterator end() { return Iterator(arr + num_elements); }
+    Iterator end() { return Iterator(arr + size); }
 };
