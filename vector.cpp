@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <optional>
 
 template <typename T>
 class Vector
@@ -20,7 +22,7 @@ public:
         if (capacity < new_capacity)
         {
             capacity = new_capacity;
-            T tmp = new T[capacity];
+            T* tmp = new T[capacity];
 
             for (int i = 0; i < capacity; ++i)
             {
@@ -31,11 +33,11 @@ public:
         }
         else
         {
-            std::cout << "New capacity is not greater than the current one. No changes have been made." << std::endl;
+            std::cout << "reserve(): New capacity is not greater than the current one. No changes have been made." << std::endl;
         }
     }
 
-    void push_back(T data)
+    void push_back(const T& data)
     {
         if (num_elements == capacity)
         {
@@ -44,7 +46,29 @@ public:
         arr[num_elements++] = data;
     }
 
-    T pop_back()
+    template <typename... Args>
+    void emplace_back(Args&&... args)
+    {
+        if (num_elements == capacity)
+        {
+            reserve(capacity * 2);
+        }
+        new (&arr[num_elements++]) T(std::forward<Args>(args)...);
+    }
+
+    T& front()
+    {
+        if (num_elements > 0)
+        {
+            return arr[0];
+        }
+        else
+        {
+            throw std::runtime_error("front(): The vector is empty.");
+        }
+    }
+
+    T& back()
     {
         if (num_elements > 0)
         {
@@ -52,7 +76,7 @@ public:
         }
         else
         {
-            std::cout << "The vector is empty." << std::endl;
+            throw std::runtime_error("back(): The vector is empty.");
         }
     }
 
@@ -64,7 +88,20 @@ public:
         }
         else
         {
-            std::cout << "Index is not within range." << std::endl;
+            std::cout << "get(): Index is not within range." << std::endl;
+        }
+    }
+
+    void pop_back()
+    {
+        if (num_elements > 0)
+        {
+            --num_elements;
+            arr[num_elements].~T();
+        }
+        else
+        {
+            throw std::runtime_error("pop_back(): The vector is empty.");
         }
     }
 
@@ -83,11 +120,27 @@ public:
         return capacity;
     }
 
+    T& operator[](size_t index)
+    {
+        if (index >= num_elements) {
+            throw std::out_of_range("[]: Index out of range");
+        }
+        return arr[index];
+    }
+
+    const T& operator[](size_t index) const
+    {
+        if (index >= num_elements) {
+            throw std::out_of_range("[]: Index out of range");
+        }
+        return arr[index];
+    }
+
     void print()
     {
-        for (T el : arr)
+        for (int i = 0; i < num_elements; ++i)
         {
-            std::cout << el << " ";
+            std::cout << arr[i] << " ";
         }
         std::cout << std::endl;
     }
@@ -100,5 +153,18 @@ private:
 
 int main()
 {
-    std::cout << "Hello world!" << std::endl;
+    Vector<int> int_vec;
+    Vector<std::string> str_vec;
+
+    //int tmp = int_vec.back();
+    int_vec.push_back(1);
+    int_vec.emplace_back(2);
+    int_vec.print();
+
+    //str_vec.pop_back();
+    //std::string s = str_vec.back();
+    str_vec.push_back("aaa");
+    str_vec.emplace_back("bbb");
+    str_vec.print();
+    std::cout << str_vec[0] << std::endl;
 }
