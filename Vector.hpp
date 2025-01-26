@@ -77,7 +77,7 @@ public:
     {
         if (num_elements > 0)
         {
-            return arr[--num_elements];
+            return arr[num_elements-1];
         }
         else
         {
