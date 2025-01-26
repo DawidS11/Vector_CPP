@@ -5,6 +5,11 @@
 template <typename T>
 class Vector
 {
+private:
+    T* arr;
+    int capacity;
+    int num_elements;
+
 public:
     Vector()
     : capacity(1), num_elements(0)
@@ -136,7 +141,7 @@ public:
         return arr[index];
     }
 
-    void print()
+    void print() const
     {
         for (int i = 0; i < num_elements; ++i)
         {
@@ -145,8 +150,33 @@ public:
         std::cout << std::endl;
     }
 
-private:
-    T* arr;
-    int capacity;
-    int num_elements;
+    class Iterator 
+    {
+    private:
+        T* ptr_;
+    public:
+        Iterator(T* ptr)
+        : ptr_(ptr)
+        {}
+
+        // Dereferencing operator
+        T& operator*() { return *ptr_; }
+        const T& operator*() const { return *ptr_; }
+
+        // Pointer dereference operator
+        T* operator->() { return ptr_; }
+        const T* operator->() const { return ptr_; }
+
+        Iterator& operator++() { ++ptr_; return *this; }
+        Iterator operator++(int) { Iterator tmp = *this; ++ptr_; return tmp; }
+
+        Iterator& operator--() { --ptr_; return *this; }
+        Iterator operator--(int) { Iterator tmp = *this; --ptr_; return tmp; }
+
+        bool operator==(const Iterator& other) const { return ptr_ == other.ptr_; }
+        bool operator!=(const Iterator& other) const { return ptr_ != other.ptr_; }
+    };
+
+    Iterator begin() { return Iterator(arr); }
+    Iterator end() { return Iterator(arr + num_elements); }
 };
